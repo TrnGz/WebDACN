@@ -1,0 +1,94 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Chỉnh sửa người dùng{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="card-header">
+        <h3><i class="fas fa-user-edit"></i> Chỉnh sửa thông tin người dùng</h3>
+    </div>
+    
+    <form method="post" class="form-container">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="firstName">Họ *</label>
+                <input type="text" name="firstName" id="firstName" class="form-control" 
+                       value="{{ user[2] }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="lastName">Tên *</label>
+                <input type="text" name="lastName" id="lastName" class="form-control" 
+                       value="{{ user[3] }}" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" name="email" id="email" class="form-control" 
+                   value="{{ user[1] }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Điện thoại</label>
+            <input type="text" name="phone" id="phone" class="form-control" 
+                   value="{{ user[10] or '' }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="address1">Địa chỉ 1</label>
+            <input type="text" name="address1" id="address1" class="form-control" 
+                   value="{{ user[4] or '' }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="address2">Địa chỉ 2</label>
+            <input type="text" name="address2" id="address2" class="form-control" 
+                   value="{{ user[5] or '' }}">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="city">Thành phố</label>
+                <input type="text" name="city" id="city" class="form-control" 
+                       value="{{ user[7] or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="state">Tỉnh/Bang</label>
+                <input type="text" name="state" id="state" class="form-control" 
+                       value="{{ user[8] or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="zipcode">Mã bưu điện</label>
+                <input type="text" name="zipcode" id="zipcode" class="form-control" 
+                       value="{{ user[6] or '' }}">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="country">Quốc gia</label>
+            <input type="text" name="country" id="country" class="form-control" 
+                   value="{{ user[9] or '' }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="role">Vai trò</label>
+            <select name="role" id="role" class="form-control">
+                <option value="user" {% if user[11] == 'user' %}selected{% endif %}>Người dùng</option>
+                <option value="admin" {% if user[11] == 'admin' %}selected{% endif %}>Quản trị viên</option>
+            </select>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 30px;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Cập nhật
+            </button>
+            <a href="{{ url_for('admin.list_users') }}" class="btn" style="background: #6c757d; color: white;">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

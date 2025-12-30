@@ -1,0 +1,4 @@
+Tài khoản admin:
+- Username: admin@example.com
+- Password: admin123
+truy cập tới trang: http://127.0.0.1:5000/admin/products để quản lý sản phẩm bằng cơ sở dữ liệu

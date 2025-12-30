@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chỉnh sửa thông tin cá nhân</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/topStyle.css') }}" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .profile-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 300;
+    }
+
+    .profile-header .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+
+    .sidebar h3 {
+      color: #333;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 0.5rem;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin-bottom: 1rem;
+    }
+
+    .sidebar a {
+      color: #555;
+      text-decoration: none;
+      padding: 0.8rem 1rem;
+      display: block;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #f8f9ff;
+      color: #667eea;
+      border-left-color: #667eea;
+      transform: translateX(5px);
+    }
+
+    .form-container {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .form-container h2 {
+      color: #333;
+      margin-bottom: 2rem;
+      font-size: 1.8rem;
+      font-weight: 300;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-group input[readonly] {
+      background-color: #f8f9fa;
+      color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .required {
+      color: #e74c3c;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
+      grid-column: 1 / -1;
+    }
+
+    .btn {
+      padding: 15px 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      font-weight: 500;
+      min-width: 150px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .info-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-card i {
+      font-size: 2rem;
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    .info-card h4 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .info-card p {
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .flash-messages {
+      margin-bottom: 1rem;
+    }
+
+    .flash-message {
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .flash-message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .flash-message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .profile-header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Header (giống như home.html) -->
+<div id="title">
+  <a href="/">
+    <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+  </a>
+
+  <form>
+    <input id="searchBox" type="text" name="searchQuery" placeholder="Tìm kiếm sản phẩm...">
+    <input id="searchButton" type="submit" value="Tìm kiếm">
+  </form>
+
+  {% if not loggedIn %}
+  <div id="signInButton">
+    <a class="link" href="/loginForm">Đăng nhập</a>
+  </div>
+  {% else %}
+  <div class="dropdown">
+    <button class="dropbtn">Xin chào,<br>{{firstName}}</button>
+    <div class="dropdown-content">
+      <a href="/account/orders">Đơn hàng của bạn</a>
+      <a href="/account/profile">Thông tin cá nhân</a>
+      <hr>
+      <a href="/logout">Đăng xuất</a>
+    </div>
+  </div>
+  {% endif %}
+
+  <div id="kart">
+    <a class="link" href="/cart">
+      <img src="{{ url_for('static', filename='images/shoppingCart.png') }}" id="cartIcon" alt="Giỏ hàng" />
+      GIỎ HÀNG ({{noOfItems}})
+    </a>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <h1><i class="fas fa-user-edit"></i> Chỉnh sửa thông tin cá nhân</h1>
+    <p class="subtitle">Cập nhật thông tin để có trải nghiệm mua sắm tốt nhất</p>
+  </div>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for message in messages %}
+          <div class="flash-message success">
+            <i class="fas fa-check-circle"></i> {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Info Cards -->
+  <div class="info-cards">
+    <div class="info-card">
+      <i class="fas fa-shield-alt"></i>
+      <h4>Bảo mật thông tin</h4>
+      <p>Thông tin của bạn được mã hóa và bảo vệ an toàn</p>
+    </div>
+    <div class="info-card">
+      <i class="fas fa-shipping-fast"></i>
+      <h4>Giao hàng nhanh</h4>
+      <p>Địa chỉ chính xác giúp giao hàng nhanh chóng</p>
+    </div>
+    <div class="info-card">
+      <i class="fas fa-headset"></i>
+      <h4>Hỗ trợ 24/7</h4>
+      <p>Liên hệ qua số điện thoại để được hỗ trợ tốt nhất</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h3><i class="fas fa-user-cog"></i> Quản lý tài khoản</h3>
+      <ul>
+        <li><a href="/account/profile"><i class="fas fa-home"></i> Tổng quan</a></li>
+        <li><a href="/account/profile/view"><i class="fas fa-eye"></i> Xem thông tin</a></li>
+        <li><a href="/account/profile/edit" class="active"><i class="fas fa-edit"></i> Chỉnh sửa thông tin</a></li>
+        <li><a href="/account/profile/changePassword"><i class="fas fa-key"></i> Đổi mật khẩu</a></li>
+        <li><a href="/account/orders"><i class="fas fa-shopping-bag"></i> Đơn hàng</a></li>
+        <li><a href="/cart"><i class="fas fa-shopping-cart"></i> Giỏ hàng</a></li>
+      </ul>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+      <h2><i class="fas fa-user-edit"></i> Cập nhật thông tin cá nhân</h2>
+      
+      <form method="POST" action="/account/profile/edit">
+        <div class="form-grid">
+          <!-- Email (readonly) -->
+          <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i> Email <span class="required">*</span></label>
+            <input type="email" id="email" name="email" value="{{profileData[1] if profileData and profileData[1] else ''}}" readonly>
+            <small style="color: #666; font-size: 0.8rem;">Email không thể thay đổi</small>
+          </div>
+
+          <!-- First Name -->
+          <div class="form-group">
+            <label for="firstName"><i class="fas fa-user"></i> Tên <span class="required">*</span></label>
+            <input type="text" id="firstName" name="firstName" value="{{profileData[2] if profileData and profileData[2] else ''}}" required>
+          </div>
+
+          <!-- Last Name -->
+          <div class="form-group">
+            <label for="lastName"><i class="fas fa-user"></i> Họ <span class="required">*</span></label>
+            <input type="text" id="lastName" name="lastName" value="{{profileData[3] if profileData and profileData[3] else ''}}" required>
+          </div>
+
+          <!-- Phone -->
+          <div class="form-group">
+            <label for="phone"><i class="fas fa-phone"></i> Số điện thoại</label>
+            <input type="tel" id="phone" name="phone" value="{{profileData[10] if profileData and profileData[10] else ''}}" placeholder="Ví dụ: 0123456789">
+          </div>
+
+          <!-- Address 1 -->
+          <div class="form-group full-width">
+            <label for="address1"><i class="fas fa-map-marker-alt"></i> Địa chỉ chính</label>
+            <input type="text" id="address1" name="address1" value="{{profileData[4] if profileData and profileData[4] else ''}}" placeholder="Số nhà, tên đường...">
+          </div>
+
+          <!-- Address 2 -->
+          <div class="form-group full-width">
+            <label for="address2"><i class="fas fa-building"></i> Địa chỉ phụ (tùy chọn)</label>
+            <input type="text" id="address2" name="address2" value="{{profileData[5] if profileData and profileData[5] else ''}}" placeholder="Chung cư, tòa nhà, ghi chú thêm...">
+          </div>
+
+          <!-- City -->
+          <div class="form-group">
+            <label for="city"><i class="fas fa-city"></i> Thành phố/Tỉnh</label>
+            <input type="text" id="city" name="city" value="{{profileData[7] if profileData and profileData[7] else 'Hải Dương'}}" placeholder="Hải Dương">
+          </div>
+
+          <!-- State/Province -->
+          <div class="form-group">
+            <label for="state"><i class="fas fa-map"></i> Quận/Huyện</label>
+            <input type="text" id="state" name="state" value="{{profileData[8] if profileData and profileData[8] else ''}}" placeholder="Quận/Huyện">
+          </div>
+
+          <!-- Zipcode -->
+          <div class="form-group">
+            <label for="zipcode"><i class="fas fa-mail-bulk"></i> Mã bưu điện</label>
+            <input type="text" id="zipcode" name="zipcode" value="{{profileData[6] if profileData and profileData[6] else ''}}" placeholder="Ví dụ: 170000">
+          </div>
+
+          <!-- Country -->
+          <div class="form-group">
+            <label for="country"><i class="fas fa-flag"></i> Quốc gia</label>
+            <select id="country" name="country">
+              <option value="Việt Nam" {% if not profileData or not profileData[9] or profileData[9] == 'Việt Nam' %}selected{% endif %}>Việt Nam</option>
+              <option value="Hoa Kỳ" {% if profileData and profileData[9] == 'Hoa Kỳ' %}selected{% endif %}>Hoa Kỳ</option>
+              <option value="Nhật Bản" {% if profileData and profileData[9] == 'Nhật Bản' %}selected{% endif %}>Nhật Bản</option>
+              <option value="Hàn Quốc" {% if profileData and profileData[9] == 'Hàn Quốc' %}selected{% endif %}>Hàn Quốc</option>
+              <option value="Trung Quốc" {% if profileData and profileData[9] == 'Trung Quốc' %}selected{% endif %}>Trung Quốc</option>
+            </select>
+          </div>
+
+          <!-- Buttons -->
+          <div class="btn-container">
+            <a href="/account/profile/view" class="btn btn-secondary">
+              <i class="fas fa-times"></i> Hủy bỏ
+            </a>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i> Cập nhật thông tin
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Additional Info Section -->
+  <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 2rem;">
+    <h3 style="color: #333; margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Lưu ý quan trọng</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+      <div>
+        <h4 style="color: #667eea; margin-bottom: 0.5rem;"><i class="fas fa-check-circle"></i> Thông tin chính xác</h4>
+        <p style="color: #666; line-height: 1.5;">Vui lòng cung cấp thông tin chính xác để đảm bảo việc giao hàng và liên lạc thuận tiện.</p>
+      </div>
+      <div>
+        <h4 style="color: #667eea; margin-bottom: 0.5rem;"><i class="fas fa-lock"></i> Bảo mật dữ liệu</h4>
+        <p style="color: #666; line-height: 1.5;">Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn và không chia sẻ với bên thứ ba.</p>
+      </div>
+      <div>
+        <h4 style="color: #667eea; margin-bottom: 0.5rem;"><i class="fas fa-sync"></i> Cập nhật linh hoạt</h4>
+        <p style="color: #666; line-height: 1.5;">Bạn có thể cập nhật thông tin bất cứ lúc nào để có trải nghiệm tốt nhất.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation
+  document.querySelector('form').addEventListener('submit', function(e) {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    
+    if (!firstName || !lastName) {
+      e.preventDefault();
+      alert('Vui lòng nhập đầy đủ họ và tên!');
+      return false;
+    }
+    
+    const phone = document.getElementById('phone').value.trim();
+    if (phone && !phone.match(/^[0-9+\-\s()]+$/)) {
+      e.preventDefault();
+      alert('Số điện thoại không hợp lệ!');
+      return false;
+    }
+  });
+
+  // Auto-focus first empty required field
+  document.addEventListener('DOMContentLoaded', function() {
+    const requiredFields = document.querySelectorAll('input[required]');
+    for (let field of requiredFields) {
+      if (!field.value.trim()) {
+        field.focus();
+        break;
+      }
+    }
+  });
+
+  // Debug: Log form data when submitting
+  document.querySelector('form').addEventListener('submit', function(e) {
+    console.log('Form submission data:');
+    const formData = new FormData(this);
+    for (let [key, value] of formData.entries()) {
+      console.log(key + ': ' + value);
+    }
+  });
+</script>
+
+</body>
+</html>

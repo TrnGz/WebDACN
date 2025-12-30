@@ -1,0 +1,117 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Chi tiết đơn hàng #{{ order[0] }}{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+    <!-- Order Details -->
+    <div class="content-card">
+        <div class="card-header">
+            <h3><i class="fas fa-receipt"></i> Chi tiết đơn hàng #{{ order[0] }}</h3>
+        </div>
+        
+        <div style="padding: 25px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                <div>
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Thông tin khách hàng</h4>
+                    <p><strong>Họ tên:</strong> {{ order[1] }} {{ order[2] }}</p>
+                    <p><strong>Email:</strong> {{ order[3] }}</p>
+                    <p><strong>Điện thoại:</strong> {{ order[4] or 'Chưa cập nhật' }}</p>
+                </div>
+                
+                <div>
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Thông tin đơn hàng</h4>
+                    <p><strong>Ngày đặt:</strong> {{ order[5] }}</p>
+                    <p><strong>Phương thức thanh toán:</strong> {{ order[9] or 'Chưa xác định' }}</p>
+                    <p><strong>Địa chỉ giao hàng:</strong> {{ order[8] or 'Chưa cập nhật' }}</p>
+                </div>
+            </div>
+            
+            <h4 style="margin-bottom: 15px; color: #2c3e50;">Sản phẩm đã đặt</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Ảnh</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                        <tr>
+                            <td><strong>{{ item[0] }}</strong></td>
+                            <td>
+                                {% if item[1] %}
+                                    <img src="{{ url_for('static', filename='uploads/' + item[1]) }}" 
+                                         alt="Ảnh sản phẩm" class="product-image">
+                                {% else %}
+                                    <div style="width: 50px; height: 50px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-image" style="color: #ccc;"></i>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ "{:,.0f}".format(item[2]) }} VNĐ</td>
+                            <td>{{ item[3] }}</td>
+                            <td><strong>{{ "{:,.0f}".format(item[2] * item[3]) }} VNĐ</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr style="background-color: #f8f9fa; font-weight: bold;">
+                            <td colspan="4" style="text-align: right;">Tổng cộng:</td>
+                            <td><strong style="color: #e74c3c; font-size: 1.2rem;">{{ "{:,.0f}".format(order[7]) }} VNĐ</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Order Status -->
+    <div class="content-card">
+        <div class="card-header">
+            <h3><i class="fas fa-cog"></i> Cập nhật trạng thái</h3>
+        </div>
+        
+        <div style="padding: 25px;">
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Trạng thái hiện tại:</label>
+                <span class="status-badge 
+                    {% if order[6] == 'Đang xử lý' %}status-pending
+                    {% elif order[6] == 'Đang giao' %}status-processing
+                    {% elif order[6] == 'Hoàn thành' %}status-completed
+                    {% else %}status-cancelled{% endif %}" 
+                    style="font-size: 1rem; padding: 8px 16px;">
+                    {{ order[6] }}
+                </span>
+            </div>
+            
+            <form method="post" action="{{ url_for('admin.update_order_status', orderId=order[0]) }}">
+                <div class="form-group">
+                    <label for="status">Cập nhật trạng thái:</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="Đang xử lý" {% if order[6] == 'Đang xử lý' %}selected{% endif %}>Đang xử lý</option>
+                        <option value="Đã xác nhận" {% if order[6] == 'Đã xác nhận' %}selected{% endif %}>Đã xác nhận</option>
+                        <option value="Đang giao" {% if order[6] == 'Đang giao' %}selected{% endif %}>Đang giao</option>
+                        <option value="Hoàn thành" {% if order[6] == 'Hoàn thành' %}selected{% endif %}>Hoàn thành</option>
+                        <option value="Đã hủy" {% if order[6] == 'Đã hủy' %}selected{% endif %}>Đã hủy</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-save"></i> Cập nhật trạng thái
+                </button>
+            </form>
+            
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                <a href="{{ url_for('admin.list_orders') }}" class="btn" style="background: #6c757d; color: white; width: 100%; text-align: center;">
+                    <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

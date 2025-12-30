@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Thanh toán</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}" />
+</head>
+<body>
+<div id="title">
+	<a href="/">
+	<img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" />
+	</a>
+	<form>
+		<input id="searchBox" type="text" name="searchQuery" placeholder="Tìm kiếm...">
+		<input id="searchButton" type="submit" value="Tìm kiếm">
+	</form>
+	{% if not loggedIn %}
+		<div id="signInButton">
+			<a class="link" href="/loginForm">Đăng nhập</a>
+		</div>
+	{% else %}
+	<div class="dropdown">
+		<button class="dropbtn">Xin chào, <br>{{firstName}}</button>
+		<div class="dropdown-content">
+			<a href="/account/orders">Đơn hàng của bạn</a>
+			<a href="/account/profile">Hồ sơ cá nhân</a>
+			<hr>
+			<a href="/logout">Đăng xuất</a>
+		</div>
+	</div>
+	{% endif %}
+	<div id="kart">
+		<a class="link" href="/cart">
+		<img src="{{ url_for('static', filename='images/shoppingCart.png') or '/placeholder.svg' }}" id="cartIcon" />
+		GIỎ HÀNG {{noOfItems}}
+		</a>
+	</div>
+</div>
+
+<div class="checkoutContainer">
+    <h2>Thanh toán</h2>
+    <div class="checkoutContent">
+        <div class="orderSummary">
+            <div class="summaryHeader">
+                <h3>Tóm tắt đơn hàng</h3>
+                <a href="/cart" class="editCart">Chỉnh sửa giỏ hàng</a>
+            </div>
+            <div class="summaryItems">
+                {% for product in products %}
+                <div class="summaryItem">
+                    <div class="itemImage">
+                        <img src="{{ url_for('static', filename='uploads/'+product[3]) or '/placeholder.svg' }}" alt="{{product[1]}}">
+                    </div>
+                    <div class="itemInfo">
+                        <h4>{{product[1]}}</h4>
+                        <p class="itemPrice">{{product[2]}} VND</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="summaryTotals">
+                <div class="subtotal">
+                    <span>Tạm tính:</span>
+                    <span>{{totalPrice}} VND</span>
+                </div>
+                <div class="shipping">
+                    <span>Phí vận chuyển:</span>
+                    <span>30000 VND</span>
+                </div>
+                <div class="total">
+                    <span>Tổng cộng:</span>
+                    <span>{{totalPrice + 30000}} VND</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="checkoutForm">
+            <form action="/placeOrder" method="POST">
+                <div class="formSection">
+                    <h3>Thông tin giao hàng</h3>
+                    <div class="formRow">
+                        <div class="formGroup">
+                            <label for="firstName">Họ</label>
+                            <input type="text" id="firstName" name="firstName" value="{% if profileData and profileData[2] %}{{profileData[2]}}{% endif %}" required>
+                        </div>
+                        <div class="formGroup">
+                            <label for="lastName">Tên</label>
+                            <input type="text" id="lastName" name="lastName" value="{% if profileData and profileData[3] %}{{profileData[3]}}{% endif %}" required>
+                        </div>
+                    </div>
+                    <div class="formGroup">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="{% if profileData and profileData[1] %}{{profileData[1]}}{% endif %}" required>
+                    </div>
+                    <div class="formGroup">
+                        <label for="phone">Số điện thoại</label>
+                        <input type="tel" id="phone" name="phone" value="{% if profileData and profileData[10] %}{{profileData[10]}}{% endif %}" required>
+                    </div>
+                    <div class="formGroup">
+                        <label for="address1">Địa chỉ</label>
+                        <input type="text" id="address1" name="address1" value="{% if profileData and profileData[4] %}{{profileData[4]}}{% endif %}" required>
+                    </div>
+                    <div class="formGroup">
+                        <label for="address2">Địa chỉ bổ sung</label>
+                        <input type="text" id="address2" name="address2" value="{% if profileData and profileData[5] %}{{profileData[5]}}{% endif %}">
+                    </div>
+                    <div class="formRow">
+                        <div class="formGroup">
+                            <label for="city">Thành phố</label>
+                            <input type="text" id="city" name="city" value="{% if profileData and profileData[7] %}{{profileData[7]}}{% endif %}" required>
+                        </div>
+                        <div class="formGroup">
+                            <label for="zipcode">Mã bưu điện</label>
+                            <input type="text" id="zipcode" name="zipcode" value="{% if profileData and profileData[6] %}{{profileData[6]}}{% endif %}">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="formSection">
+                    <h3>Phương thức thanh toán</h3>
+                    <div class="paymentMethods">
+                        <div class="paymentMethod">
+                            <input type="radio" id="cod" name="paymentMethod" value="cod" checked>
+                            <label for="cod">
+                                <span class="methodName">Thanh toán khi nhận hàng</span>
+                                <span class="methodDesc">Thanh toán bằng tiền mặt khi nhận hàng</span>
+                            </label>
+                        </div>
+                        <div class="paymentMethod">
+                            <input type="radio" id="bank" name="paymentMethod" value="bank">
+                            <label for="bank">
+                                <span class="methodName">Chuyển khoản ngân hàng</span>
+                                <span class="methodDesc">Chuyển khoản trước khi giao hàng</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="formActions">
+                    <button type="submit" class="placeOrderBtn">Đặt hàng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

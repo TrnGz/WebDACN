@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Xem Hồ Sơ - Sweets Shop</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/topStyle.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    main.container {
+      max-width: 1200px;
+      width: 100%;
+      padding: 3rem 1rem;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      box-sizing: border-box;
+    }
+
+    /* Profile Card */
+    .profile-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      height: fit-content;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 3rem;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-info h2 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+    }
+
+    .profile-info p {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .member-since {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      color: #374151;
+      font-weight: 500;
+      font-size: 1.125rem;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #111827;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem 3rem;
+    }
+
+    .info-item {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .info-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .info-label {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+      color: #6b7280;
+    }
+
+    .info-value {
+      font-size: 1rem;
+      color: #111827;
+      word-break: break-word;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      main.container {
+        grid-template-columns: 1fr;
+        padding: 2rem 1rem;
+      }
+      .main-content {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="title" role="banner">
+    <a href="/" aria-label="Trang chủ">
+      <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Sweets Shop" />
+    </a>
+
+    <form id="searchForm" action="/search" method="GET" role="search" aria-label="Tìm kiếm sản phẩm">
+      <input id="searchBox" name="searchQuery" type="search" placeholder="Tìm kiếm sản phẩm..." aria-describedby="searchButton" required>
+      <button id="searchButton" type="submit" aria-label="Tìm kiếm">Tìm kiếm</button>
+    </form>
+
+    {% if not loggedIn %}
+      <div id="signInButton">
+        <a class="link" href="/loginForm" aria-label="Đăng nhập">
+          Đăng nhập
+        </a>
+      </div>
+    {% else %}
+      <div class="dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">Xin chào, <br>{{firstName}}</button>
+        <div class="dropdown-content" role="menu" aria-label="Menu người dùng">
+          <a href="/account/orders" role="menuitem">Đơn hàng của bạn</a>
+          <a href="/account/profile" role="menuitem">Hồ sơ cá nhân</a>
+          <hr />
+          <a href="/logout" role="menuitem">Đăng xuất</a>
+        </div>
+      </div>
+    {% endif %}
+
+    <div id="kart">
+      <a class="link" href="/cart" aria-label="Giỏ hàng của bạn">
+        <img src="{{ url_for('static', filename='images/shoppingCart.png') }}" alt="Biểu tượng giỏ hàng" id="cartIcon" />
+        GIỎ HÀNG {{ noOfItems }}
+      </a>
+    </div>
+  </div>
+
+  <main class="container" role="main" aria-labelledby="profileHeading">
+    <section class="profile-card" aria-label="Thông tin người dùng">
+      <div class="profile-avatar" aria-hidden="true">
+        {{ user_info.avatar_letters }}
+      </div>
+      <div class="profile-info">
+        <h2 id="profileHeading">{{ user_info.fullName }}</h2>
+        <p><i class="fas fa-envelope" aria-hidden="true"></i> {{ user_info.email }}</p>
+        {% if user_info.phone %}
+          <p><i class="fas fa-phone" aria-hidden="true"></i> {{ user_info.phone }}</p>
+        {% endif %}
+        <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> {{ user_info.city }}, {{ user_info.country }}</p>
+        <div class="member-since" aria-label="Thành viên từ">
+          <i class="fas fa-calendar-alt" aria-hidden="true"></i> Thành viên từ {{ user_info.member_since }}
+        </div>
+      </div>
+    </section>
+
+    <section class="main-content" aria-label="Thông tin chi tiết người dùng">
+      <h3 class="section-title">Thông tin cá nhân</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Họ</span>
+          <span class="info-value">{{ user_info.firstName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Tên</span>
+          <span class="info-value">{{ user_info.lastName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Địa chỉ 1</span>
+          <span class="info-value">{{ user_info.address1 or '-' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Địa chỉ 2</span>
+          <span class="info-value">{{ user_info.address2 or '-' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Mã bưu điện</span>
+          <span class="info-value">{{ user_info.zipcode or '-' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Thành phố</span>
+          <span class="info-value">{{ user_info.city or '-' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Tỉnh/Bang</span>
+          <span class="info-value">{{ user_info.state or '-' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Quốc gia</span>
+          <span class="info-value">{{ user_info.country or '-' }}</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

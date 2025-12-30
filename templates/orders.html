@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Đơn hàng của bạn</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/orders.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/topStyle.css') }}" />
+</head>
+<body>
+<div id="title">
+	<a href="/">
+	<img id="logo" src="{{ url_for('static', filename='images/logo.png') or '/placeholder.svg' }}" />
+	</a>
+	<form>
+		<input id="searchBox" type="text" name="searchQuery" placeholder="Tìm kiếm...">
+		<input id="searchButton" type="submit" value="Tìm kiếm">
+	</form>
+	{% if not loggedIn %}
+		<div id="signInButton">
+			<a class="link" href="/loginForm">Đăng nhập</a>
+		</div>
+	{% else %}
+	<div class="dropdown">
+		<button class="dropbtn">Xin chào, <br>{{firstName}}</button>
+		<div class="dropdown-content">
+			<a href="/account/orders">Đơn hàng của bạn</a>
+			<a href="/account/profile">Hồ sơ cá nhân</a>
+			<hr>
+			<a href="/logout">Đăng xuất</a>
+		</div>
+	</div>
+	{% endif %}
+	<div id="kart">
+		<a class="link" href="/cart">
+		<img src="{{ url_for('static', filename='images/shoppingCart.png') or '/placeholder.svg' }}" id="cartIcon" />
+		GIỎ HÀNG {{noOfItems}}
+		</a>
+	</div>
+</div>
+
+<div class="orderContainer">
+    <h2>Đơn hàng của bạn</h2>
+    {% if orders %}
+        <div class="orderList">
+            {% for order in orders %}
+            <div class="orderCard">
+                <div class="orderHeader">
+                    <div class="orderInfo">
+                        <h3>Đơn hàng #{{order.orderId}}</h3>
+                        <span class="orderDate">{{order.orderDate}}</span>
+                    </div>
+                    <div class="orderStatus">{{order.status}}</div>
+                </div>
+                <div class="orderItems">
+                    {% for item in order.order_items %}
+                    <div class="orderItem">
+                        <div class="itemImage">
+                            <img src="{{ url_for('static', filename='uploads/'+item.image) or '/placeholder.svg' }}" alt="{{item.name}}">
+                        </div>
+                        <div class="itemDetails">
+                            <h4>{{item.name}}</h4>
+                            <p class="itemPrice">{{item.price}} VND</p>
+                            <p class="itemQuantity">Số lượng: {{item.quantity}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="orderFooter">
+                    <div class="orderTotal">
+                        <span>Tổng tiền:</span>
+                        <span class="totalPrice">{{order.totalPrice}} VND</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="emptyOrders">
+            <div class="emptyIcon">🛒</div>
+            <h3>Bạn chưa có đơn hàng nào</h3>
+            <p>Hãy khám phá các sản phẩm tuyệt vời của chúng tôi và đặt hàng ngay!</p>
+            <a href="/" class="shopNow">Mua sắm ngay</a>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>

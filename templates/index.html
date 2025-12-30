@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Chào mừng</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/topStyle.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/carousel-buttons.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div id="title">
+	<a href="/">
+		<img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" />
+	</a>
+	<form action="/search" method="GET">
+  <input id="searchBox" type="text" name="searchQuery" placeholder="Tìm kiếm sản phẩm...">
+  <input id="searchButton" type="submit" value="Tìm kiếm">
+</form>
+
+
+	{% if not loggedIn %}
+	<div id="signInButton">
+		<a class="link" href="/loginForm">Đăng nhập</a>
+	</div>
+	{% else %}
+	<div class="dropdown">
+		<button class="dropbtn">Xin chào, <br>{{firstName}}</button>
+		<div class="dropdown-content">
+			<a href="/account/orders">Đơn hàng của bạn</a>
+			<a href="/account/profile">Hồ sơ cá nhân</a>
+			<hr>
+			<a href="/logout">Đăng xuất</a>
+		</div>
+	</div>
+	{% endif %}
+	<div id="kart">
+		<a class="link" href="/cart">
+			<img src="{{ url_for('static', filename='images/shoppingCart.png') }}" id="cartIcon" />
+			GIỎ HÀNG {{noOfItems}}
+		</a>
+	</div>
+</div>
+
+<!-- Phần giới thiệu website -->
+<div id="websiteIntro" class="website-intro">
+	<div class="intro-content">
+		<h1>📚 Chào mừng đến với Văn Phòng Phẩm Store 🖊️</h1>
+		<p>Khám phá thế giới văn phòng phẩm tuyệt vời với hơn 1000+ sản phẩm chất lượng cao. Từ bút chì đặc biệt đến những quyển sổ xinh xắn, chúng tôi mang đến cho bạn những trải nghiệm mua sắm tuyệt vời nhất.</p>
+		<div class="intro-features">
+			<div class="feature">
+				<span class="feature-icon">🚚</span>
+				<span>Giao hàng miễn phí</span>
+			</div>
+			<div class="feature">
+				<span class="feature-icon">🏆</span>
+				<span>Chất lượng đảm bảo</span>
+			</div>
+			<div class="feature">
+				<span class="feature-icon">⭐</span>
+				<span>Đánh giá 5 sao</span>
+			</div>
+		</div>
+	</div>
+	<button id="hideIntroBtn" class="hide-intro-btn" onclick="toggleIntro()">
+		<span>Ẩn giới thiệu</span>
+		<span class="arrow">▲</span>
+	</button>
+</div>
+
+<div class="display">
+	<div class="displayCategory">
+		<h2>Mua theo danh mục: </h2>
+		<ul>
+			{% for row in categoryData %}
+			<li><a href="/displayCategory?categoryId={{row[0]}}">{{row[1]}}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div>
+		<h2>Sản phẩm nổi bật</h2>
+		{% for data in itemData %}
+		<div class="product-carousel-container" data-carousel-id="carousel-{{loop.index}}">
+			<button class="nav-button prev-button" aria-label="Sản phẩm trước đó">
+				<span class="nav-icon">&#10094;</span>
+			</button>
+			
+			<div class="product-carousel">
+				<table>
+					<tr id="productName">
+						{% for row in data %}
+						<td>
+							{{row[1]}}
+						</td>
+						{% endfor %}
+					</tr>
+					<tr id="productImage">
+						{% for row in data %}
+						<td>
+							<a href="/productDescription?productId={{row[0]}}">
+								<img src="{{ url_for('static', filename='uploads/' + row[4]) }}" id="itemImage" loading="lazy" alt="{{row[1]}}" />
+							</a>
+						</td>
+						{% endfor %}
+					</tr>
+					<tr id="productPrice">
+				{% for row in data %}
+				<td>
+					{{ "{:,.0f}".format(row[2]) }} VNĐ
+				</td>
+				{% endfor %}
+				</tr>
+				</table>
+			</div>
+			
+			<button class="nav-button next-button" aria-label="Sản phẩm tiếp theo">
+				<span class="nav-icon">&#10095;</span>
+			</button>
+		</div>
+		{% endfor %}
+		
+		<!-- Nút xem tất cả sản phẩm -->
+		<div class="view-all-section">
+			<a href="/products" class="view-all-btn">
+				<span class="btn-text">Xem tất cả sản phẩm</span>
+				<span class="btn-icon">🛍️</span>
+				<span class="btn-arrow">→</span>
+			</a>
+			<p class="view-all-description">Khám phá toàn bộ những đồ dùng văn phòng với hơn +20 loại đa dạng</p>
+		</div>
+	</div>
+</div>
+
+<!-- Footer thông tin về web văn phòng phẩm -->
+<footer class="bakery-footer">
+	<div class="footer-container">
+		<div class="footer-section about">
+			<h3>Về Văn Phòng Phẩm Store</h3>
+			<p>Chúng tôi là cửa hàng văn phòng phẩm hàng đầu với hơn 10 năm kinh nghiệm trong việc cung cấp những sản phẩm chất lượng cao cho công việc và học tập. Cam kết mang đến cho khách hàng những mặt hàng đa dạng với chất lượng đảm bảo.</p>
+		</div>
+		
+		<div class="footer-section contact">
+			<h3>Thông tin liên hệ</h3>
+			<div class="contact-item">
+				<span class="contact-icon">📍</span>
+				<span>123 Đường Nguyễn Văn Linh, Quận 7, TP.HCM</span>
+			</div>
+			<div class="contact-item">
+				<span class="contact-icon">📞</span>
+				<span>0123 456 789</span>
+			</div>
+			<div class="contact-item">
+				<span class="contact-icon">✉️</span>
+				<span>info@vanphongpham.vn</span>
+			</div>
+		</div>
+		
+		<div class="footer-section hours">
+			<h3>Giờ mở cửa</h3>
+			<div class="hours-item">
+				<span>Thứ 2 - Thứ 6:</span>
+				<span>7:00 - 21:00</span>
+			</div>
+			<div class="hours-item">
+				<span>Thứ 7 - Chủ nhật:</span>
+				<span>6:00 - 22:00</span>
+			</div>
+		</div>
+		
+		<div class="footer-section social">
+			<h3>Theo dõi chúng tôi</h3>
+			<div class="social-links">
+				<a href="#" class="social-link">📘 Facebook</a>
+				<a href="#" class="social-link">📷 Instagram</a>
+				<a href="#" class="social-link">🐦 Twitter</a>
+			</div>
+			<div class="quality-badge">
+				<span class="badge-icon">🏆</span>
+				<span>Chất lượng đảm bảo 100%</span>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer-bottom">
+		<p>&copy; 2024 Văn Phòng Phẩm Store. Tất cả quyền được bảo lưu.</p>
+	</div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+function toggleIntro() {
+	const intro = document.getElementById('websiteIntro');
+	const btn = document.getElementById('hideIntroBtn');
+	
+	if (intro.classList.contains('hidden')) {
+		intro.classList.remove('hidden');
+		btn.innerHTML = '<span>Ẩn giới thiệu</span><span class="arrow">▲</span>';
+	} else {
+		intro.classList.add('hidden');
+		btn.innerHTML = '<span>Hiện giới thiệu</span><span class="arrow">▼</span>';
+	}
+}
+</script>
+</body>
+</html>

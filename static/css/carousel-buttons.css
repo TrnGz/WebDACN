@@ -1,0 +1,119 @@
+/* Nút điều hướng carousel */
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--accent-gold) 100%);
+  border: none;
+  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  opacity: 0.9;
+}
+
+.prev-button {
+  left: -15px;
+}
+
+.next-button {
+  right: -15px;
+}
+
+.nav-button:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4);
+  opacity: 1;
+}
+
+.nav-button:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.nav-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #cccccc 0%, #dddddd 100%);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.nav-icon {
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Hiệu ứng khi hover vào container */
+.product-carousel-container:hover .nav-button {
+  opacity: 1;
+}
+
+/* Vị trí container */
+.product-carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 0 20px;
+  contain: layout style;
+}
+
+/* Carousel */
+.product-carousel {
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  contain: layout;
+  will-change: scroll-position;
+  border-radius: 35px;
+  padding: 1rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .prev-button {
+    left: -10px;
+  }
+
+  .next-button {
+    right: -10px;
+  }
+
+  .nav-icon {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .prev-button {
+    left: -8px;
+  }
+
+  .next-button {
+    right: -8px;
+  }
+
+  .nav-icon {
+    font-size: 1rem;
+  }
+}

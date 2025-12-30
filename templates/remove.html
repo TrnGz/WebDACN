@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Remove</title>
+  <style>
+    /* Reset & font */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Body với background đồ ngọt */
+    body {
+      min-height: 100vh;
+      background: 
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+        url('https://images.unsplash.com/photo-1562440499-4b3b51dbf4d4?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      animation: bgFade 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgFade {
+      0% {filter: brightness(1);}
+      50% {filter: brightness(0.85);}
+      100% {filter: brightness(1);}
+    }
+
+    /* Bảng */
+    table {
+      border-collapse: collapse;
+      width: 90%;
+      max-width: 1200px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 15px 30px rgba(251, 166, 213, 0.4);
+      border-radius: 15px;
+      overflow: hidden;
+      animation: slideIn 1s ease forwards;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Ô trong bảng */
+    td {
+      border: 1px solid #f8c1d5;
+      padding: 15px 20px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 1rem;
+      color: #7a2b50;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    td:hover {
+      background-color: #fce8f3;
+      transform: scale(1.05);
+    }
+
+    /* Ảnh trong bảng */
+    #itemImage {
+      max-width: 100px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(123, 47, 247, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    #itemImage:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <table>
+    {% for i in range(6) %}
+    <tr>
+      {% for row in data %}
+      <td>
+        <a href="/removeItem?productId={{row[0]}}">
+          {% if i == 4 %}
+            <img src="{{ url_for('static', filename='uploads/' + row[i]) }}" id="itemImage" alt="Product image"/>
+          {% else %}
+            {{row[i]}}
+          {% endif %}
+        </a>
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

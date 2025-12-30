@@ -1,0 +1,74 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Chỉnh sửa sản phẩm{% endblock %}
+
+{% block content %}
+<div class="content-card" style="max-width: 700px; margin: 2rem auto;">
+    <div class="card-header">
+        <h3><i class="fas fa-edit"></i> Chỉnh sửa sản phẩm</h3>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div style="margin: 1rem 0;">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category=='success' else 'danger' if category=='error' else 'info' }}" 
+                     style="padding: 12px 20px; border-radius: 8px; margin-bottom: 10px; font-weight: 500;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <form method="POST" enctype="multipart/form-data" class="form-container" style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.1);">
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="name" style="font-weight: 600;">Tên sản phẩm *</label>
+            <input type="text" id="name" name="name" required class="form-control" value="{{ product[1] }}">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="price" style="font-weight: 600;">Giá (VNĐ) *</label>
+            <input type="number" step="0.01" min="0" id="price" name="price" required class="form-control" value="{{ product[2] }}">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="description" style="font-weight: 600;">Mô tả</label>
+            <textarea id="description" name="description" rows="4" class="form-control">{{ product[3] }}</textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="image" style="font-weight: 600;">Ảnh sản phẩm</label>
+            {% if product[4] %}
+                <div style="margin-bottom: 10px;">
+                    <img src="{{ url_for('static', filename='uploads/' + product[4]) }}" alt="Ảnh sản phẩm" style="max-width: 150px; border-radius: 12px; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);" />
+                </div>
+            {% endif %}
+            <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt" class="form-control" />
+            <small style="color: #666;">Cho phép định dạng: JPG, PNG, GIF, PDF, DOC, DOCX, TXT</small>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="stock" style="font-weight: 600;">Số lượng tồn kho *</label>
+            <input type="number" min="0" id="stock" name="stock" required class="form-control" value="{{ product[5] }}">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 2rem;">
+            <label for="category" style="font-weight: 600;">Danh mục *</label>
+            <select id="category" name="category" required class="form-control">
+                <option value="" disabled>Chọn danh mục</option>
+                {% for cat in categories %}
+                    <option value="{{ cat[0] }}" {% if product[6] == cat[0] %}selected{% endif %}>{{ cat[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; font-weight: 700; border-radius: 12px; transition: all 0.3s ease;">
+            <i class="fas fa-save"></i> Lưu thay đổi
+        </button>
+
+        <a href="{{ url_for('admin.list_products') }}" class="btn btn-secondary" style="display: block; text-align: center; margin-top: 1rem; padding: 0.75rem; font-weight: 600; border-radius: 12px; background: #6c757d; color: white; text-decoration: none; text-transform: uppercase; transition: background 0.3s ease;">
+            <i class="fas fa-arrow-left"></i> Quay lại danh sách sản phẩm
+        </a>
+    </form>
+</div>
+{% endblock %}
+

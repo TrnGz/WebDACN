@@ -1,0 +1,48 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Upload file đính kèm{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="card-header">
+        <h3><i class="fas fa-upload"></i> Upload file đính kèm đơn hàng</h3>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" class="form-container">
+        <div class="form-group">
+            <label for="orderId">Đơn hàng *</label>
+            <select name="orderId" id="orderId" class="form-control" required>
+                <option value="">Chọn đơn hàng</option>
+                {% for order in orders %}
+                <option value="{{ order[0] }}">
+                    #{{ order[0] }} - {{ order[1] }} {{ order[2] }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="file">File đính kèm *</label>
+            <input type="file" name="file" id="file" class="form-control" required>
+            <small style="color: #666; margin-top: 5px; display: block;">
+                Hỗ trợ: PDF, DOC, DOCX, TXT, JPG, PNG, GIF (Tối đa 10MB)
+            </small>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Mô tả</label>
+            <textarea name="description" id="description" class="form-control" 
+                      placeholder="Mô tả về file đính kèm..."></textarea>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 30px;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-upload"></i> Upload
+            </button>
+            <a href="{{ url_for('admin.list_order_attachments') }}" class="btn" style="background: #6c757d; color: white;">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

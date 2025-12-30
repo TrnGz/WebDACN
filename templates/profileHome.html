@@ -1,0 +1,399 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Profile Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/topStyle.css') }}" />
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<style>
+      body {
+        background-image: url('../static/images/background_1.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+
+
+    /* ==== MAIN CONTAINER ==== */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+    }
+
+    /* ==== PROFILE CARD ==== */
+    .profile-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      height: fit-content;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 3rem;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-info h2 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+    }
+
+    .profile-info p {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .member-since {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    /* ==== MAIN CONTENT ==== */
+    .main-content {
+      display: grid;
+      gap: 2rem;
+    }
+
+    /* ==== QUICK ACTIONS ==== */
+    .quick-actions {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .quick-actions h2 {
+      color: #333;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .action-card {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      text-align: center;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, #764ba2, #667eea);
+    }
+
+    .action-card i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .action-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .action-card p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    /* ==== STATS SECTION ==== */
+    .stats-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats-section h2 {
+      color: #333;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      border-radius: 16px;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* ==== RECENT ACTIVITY ==== */
+    .recent-activity {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .recent-activity h2 {
+      color: #333;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: rgba(102, 126, 234, 0.05);
+      border-radius: 12px;
+      border-left: 4px solid #667eea;
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      margin-right: 1rem;
+    }
+
+    .activity-content h4 {
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+
+    .activity-content p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* ==== RESPONSIVE ==== */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+        margin: 1rem auto;
+        padding: 0 15px;
+      }
+
+      .actions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #title {
+        padding: 8px 15px;
+      }
+
+      .profile-card {
+        padding: 1.5rem;
+      }
+    }
+</style>
+<body>
+
+<div id="title">
+  <a href="/">
+    <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+  </a>
+  <form>
+    <input id="searchBox" type="text" name="searchQuery" placeholder="Tìm kiếm sản phẩm...">
+    <input id="searchButton" type="submit" value="Tìm">
+  </form>
+
+  {% if not loggedIn %}
+  <div id="signInButton">
+    <a class="link" href="/loginForm">Đăng nhập</a>
+  </div>
+  {% else %}
+  <div class="dropdown">
+    <button class="dropbtn">Xin chào, <br>{{ firstName }}</button>
+    <div class="dropdown-content">
+      <a href="/account/orders"><i class="fas fa-box"></i> Đơn hàng của bạn</a>
+      <a href="/account/profile"><i class="fas fa-user"></i> Hồ sơ của bạn</a>
+      <hr>
+      <a href="/logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+    </div>
+  </div>
+  {% endif %}
+
+  <div id="kart">
+    <a class="link" href="/cart">
+      <img src="{{ url_for('static', filename='images/shoppingCart.png') }}" id="cartIcon" />
+      GIỎ HÀNG ({{ noOfItems }})
+    </a>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Profile Card -->
+  <div class="profile-card">
+    <div class="profile-avatar">
+      {{ user_info.avatar_letters }}
+    </div>
+    <div class="profile-info">
+      <h2>{{ user_info.fullName }}</h2>
+      <p><i class="fas fa-envelope"></i> {{ user_info.email }}</p>
+      {% if user_info.phone %}
+      <p><i class="fas fa-phone"></i> {{ user_info.phone }}</p>
+      {% endif %}
+      <p><i class="fas fa-map-marker-alt"></i> 
+        {% if user_info.city and user_info.country %}
+          {{ user_info.city }}, {{ user_info.country }}
+        {% else %}
+          Hải Dương, Việt Nam
+        {% endif %}
+      </p>
+      <div class="member-since">
+        <i class="fas fa-calendar-alt"></i> Thành viên từ {{ user_info.member_since }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h2><i class="fas fa-bolt"></i> Hành động nhanh</h2>
+      <div class="actions-grid">
+        <a href="/account/profile/view" class="action-card">
+          <i class="fas fa-user"></i>
+          <h3>Xem hồ sơ</h3>
+          <p>Xem thông tin cá nhân đầy đủ</p>
+        </a>
+        <a href="/account/profile/edit" class="action-card">
+          <i class="fas fa-edit"></i>
+          <h3>Chỉnh sửa hồ sơ</h3>
+          <p>Cập nhật thông tin cá nhân</p>
+        </a>
+        <a href="/account/profile/changePassword" class="action-card">
+          <i class="fas fa-lock"></i>
+          <h3>Đổi mật khẩu</h3>
+          <p>Thay đổi mật khẩu bảo mật</p>
+        </a>
+        <a href="/cart" class="action-card">
+          <i class="fas fa-shopping-cart"></i>
+          <h3>Giỏ hàng</h3>
+          <p>Xem và quản lý giỏ hàng</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="stats-section">
+      <h2><i class="fas fa-chart-bar"></i> Thống kê của bạn</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">{{ stats.cart_items }}</div>
+          <div class="stat-label">Sản phẩm trong giỏ</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ "{:,.0f}".format(stats.total_value) }}đ</div>
+          <div class="stat-label">Tổng giá trị</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ stats.order_count }}</div>
+          <div class="stat-label">Lần mua hàng</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ stats.satisfaction }}%</div>
+          <div class="stat-label">Độ hài lòng</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+      <h2><i class="fas fa-history"></i> Hoạt động gần đây</h2>
+      {% for activity in recent_activities %}
+      <div class="activity-item">
+        <div class="activity-icon">
+          <i class="{{ activity.icon }}"></i>
+        </div>
+        <div class="activity-content">
+          <h4>{{ activity.title }}</h4>
+          <p>{{ activity.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+      
+      {% if not recent_activities %}
+      <div class="activity-item">
+        <div class="activity-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="activity-content">
+          <h4>Chưa có hoạt động</h4>
+          <p>Bắt đầu mua sắm để xem hoạt động của bạn tại đây</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

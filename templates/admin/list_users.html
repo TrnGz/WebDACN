@@ -1,0 +1,84 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Quản lý người dùng{% endblock %}
+
+{% block content %}
+<div class="content-card" style="padding: 1rem 2rem;">
+
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3><i class="fas fa-users"></i> Danh sách người dùng</h3>
+        <form method="get" style="display: flex; align-items: center; gap: 0.5rem;">
+            <input
+                type="text"
+                name="search_name"
+                placeholder="Tìm theo tên người dùng..."
+                value="{{ search_name|default('') }}"
+                style="padding: 6px 10px; border: 1px solid #ccc; border-radius: 0.5rem; width: 220px; font-size: 0.9rem;"
+                aria-label="Tìm theo tên người dùng" />
+            <button type="submit" class="btn btn-primary" style="padding: 6px 14px;">
+                <i class="fas fa-search"></i> Tìm kiếm
+            </button>
+            {% if search_name %}
+            <a href="{{ url_for('admin.list_users') }}" class="btn btn-secondary" style="padding: 6px 14px; margin-left: 0.5rem;">
+                <i class="fas fa-sync-alt"></i> Đặt lại
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="table-container" style="margin-top: 1rem;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Vai trò</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user[0] }}</td>
+                    <td>
+                        <strong>{{ user[2] }} {{ user[3] }}</strong>
+                    </td>
+                    <td>{{ user[1] }}</td>
+                    <td>{{ user[4] or 'Chưa cập nhật' }}</td>
+                    <td>{{ user[5] }}, {{ user[6] }}</td>
+                    <td>
+                        <span class="status-badge {% if user[7] == 'admin' %}status-completed{% else %}status-pending{% endif %}">
+                            {{ 'Quản trị viên' if user[7] == 'admin' else 'Người dùng' }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin.edit_user', userId=user[0]) }}" 
+                           class="btn btn-warning" style="margin-right: 5px;">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        {% if user[7] != 'admin' %}
+                        <form method="post" action="{{ url_for('admin.delete_user', userId=user[0]) }}" 
+                              style="display: inline;" onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?');">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+                        Không tìm thấy người dùng
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

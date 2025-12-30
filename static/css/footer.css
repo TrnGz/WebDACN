@@ -1,0 +1,137 @@
+/* Footer styles cho thông tin bánh ngọt */
+.bakery-footer {
+  background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+  color: #fff;
+  margin-top: 50px;
+  padding: 40px 0 20px;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.footer-section h3 {
+  color: #ffe4b5;
+  margin-bottom: 15px;
+  font-size: 18px;
+  border-bottom: 2px solid #ffe4b5;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.footer-section p {
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: #f5deb3;
+}
+
+/* Contact section */
+.contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  color: #f5deb3;
+}
+
+.contact-icon {
+  margin-right: 10px;
+  font-size: 16px;
+  width: 20px;
+}
+
+/* Hours section */
+.hours-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #f5deb3;
+  padding: 5px 0;
+  border-bottom: 1px dotted rgba(245, 222, 179, 0.3);
+}
+
+.hours-item:last-child {
+  border-bottom: none;
+}
+
+/* Social section */
+.social-links {
+  margin-bottom: 20px;
+}
+
+.social-link {
+  display: block;
+  color: #ffe4b5;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+  font-size: 14px;
+}
+
+.social-link:hover {
+  color: #fff8dc;
+  text-decoration: underline;
+}
+
+.quality-badge {
+  background: rgba(255, 228, 181, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #ffe4b5;
+}
+
+.badge-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+/* Footer bottom */
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 228, 181, 0.3);
+  color: #f5deb3;
+  font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .bakery-footer {
+    padding: 30px 0 15px;
+  }
+
+  .hours-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-item {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    padding: 0 15px;
+  }
+
+  .footer-section h3 {
+    font-size: 16px;
+  }
+
+  .quality-badge {
+    padding: 8px;
+  }
+}

@@ -1,0 +1,120 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card products">
+        <div class="icon">
+            <i class="fas fa-box"></i>
+        </div>
+        <h3>{{ stats.total_products or 0 }}</h3>
+        <p>Tổng sản phẩm</p>
+    </div>
+    
+    <div class="stat-card users">
+        <div class="icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <h3>{{ stats.total_users or 0 }}</h3>
+        <p>Người dùng</p>
+    </div>
+    
+    <div class="stat-card orders">
+        <div class="icon">
+            <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h3>{{ stats.total_orders or 0 }}</h3>
+        <p>Đơn hàng</p>
+    </div>
+    
+    <div class="stat-card revenue">
+        <div class="icon">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+        <h3>{{ "{:,.0f}".format(stats.total_revenue or 0) }} VNĐ</h3>
+        <p>Doanh thu</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+    <!-- Low Stock Products -->
+    <div class="content-card">
+        <div class="card-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Sản phẩm sắp hết hàng</h3>
+        </div>
+        <div style="padding: 20px;">
+            {% if stats.low_stock_products %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Tồn kho</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in stats.low_stock_products %}
+                            <tr>
+                                <td>{{ product[0] }}</td>
+                                <td>
+                                    <span class="status-badge {% if product[1] == 0 %}status-cancelled{% else %}status-warning{% endif %}">
+                                        {{ product[1] }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p style="text-align: center; color: #666; padding: 20px;">Tất cả sản phẩm đều có đủ hàng</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="content-card">
+        <div class="card-header">
+            <h3><i class="fas fa-clock"></i> Đơn hàng gần đây</h3>
+        </div>
+        <div style="padding: 20px;">
+            {% if stats.recent_orders %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Trạng thái</th>
+                                <th>Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in stats.recent_orders %}
+                            <tr>
+                                <td>#{{ order[0] }}</td>
+                                <td>{{ order[1] }} {{ order[2] }}</td>
+                                <td>
+                                    <span class="status-badge 
+                                        {% if order[4] == 'Đang xử lý' %}status-pending
+                                        {% elif order[4] == 'Đang giao' %}status-processing
+                                        {% elif order[4] == 'Hoàn thành' %}status-completed
+                                        {% else %}status-cancelled{% endif %}">
+                                        {{ order[4] }}
+                                    </span>
+                                </td>
+                                <td>{{ "{:,.0f}".format(order[5]) }} VNĐ</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p style="text-align: center; color: #666; padding: 20px;">Chưa có đơn hàng nào</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

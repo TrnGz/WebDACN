@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Kết quả tìm kiếm - {{ searchQuery }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/topStyle.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div id="title">
+	<a href="/">
+		<img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" />
+	</a>
+	<form action="/search" method="GET">
+		<input id="searchBox" type="text" name="searchQuery" placeholder="Tìm kiếm sản phẩm..." value="{{ searchQuery }}" required>
+		<input id="searchButton" type="submit" value="Tìm kiếm">
+	</form>
+
+	{% if not loggedIn %}
+	<div id="signInButton">
+		<a class="link" href="/loginForm">Đăng nhập</a>
+	</div>
+	{% else %}
+	<div class="dropdown">
+		<button class="dropbtn">Xin chào, <br>{{firstName}}</button>
+		<div class="dropdown-content">
+			<a href="/account/orders">Đơn hàng của bạn</a>
+			<a href="/account/profile">Hồ sơ cá nhân</a>
+			<hr>
+			<a href="/logout">Đăng xuất</a>
+		</div>
+	</div>
+	{% endif %}
+	<div id="kart">
+		<a class="link" href="/cart">
+			<img src="{{ url_for('static', filename='images/shoppingCart.png') }}" id="cartIcon" />
+			GIỎ HÀNG {{noOfItems}}
+		</a>
+	</div>
+</div>
+
+<div class="products-container">
+	<div class="products-header">
+		<h1>🔍 Kết quả tìm kiếm cho: "{{ searchQuery }}"</h1>
+		<p>Tìm thấy {{ totalResults }} sản phẩm phù hợp</p>
+		<a href="/" class="back-home-btn">← Về trang chủ</a>
+	</div>
+
+	{% if itemData %}
+	<div class="products-grid">
+		{% for product in itemData %}
+		<div class="product-card">
+			<div class="product-image">
+				<a href="/productDescription?productId={{ product[0] }}">
+					{% if product[4] %}
+						<img src="{{ url_for('static', filename='uploads/' + product[4]) }}" alt="{{ product[1] }}" loading="lazy" />
+					{% else %}
+						<img src="{{ url_for('static', filename='images/logo.png') }}" alt="{{ product[1] }}" loading="lazy" />
+					{% endif %}
+				</a>
+				<div class="product-overlay">
+					<button class="quick-view-btn" onclick="quickView({{ product[0] }})">Xem nhanh</button>
+				</div>
+			</div>
+			<div class="product-info">
+				<h3 class="product-name">{{ product[1] }}</h3>
+				<p class="product-description">{{ product[3][:100] }}{% if product[3]|length > 100 %}...{% endif %}</p>
+				<div class="product-price">{{ "{:,.0f}".format(product[2]) }} VND</div>
+				<button class="add-to-cart-btn" data-product-id="{{ product[0] }}">
+					Thêm vào giỏ 📎
+				</button>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	{% else %}
+	<div class="no-results">
+		<h2>Không tìm thấy sản phẩm</h2>
+		<p>Không có sản phẩm nào phù hợp với từ khóa "<strong>{{ searchQuery }}</strong>".</p>
+		<p>Hãy thử tìm kiếm với từ khóa khác hoặc <a href="/">quay lại trang chủ</a>.</p>
+	</div>
+	{% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+function quickView(productId) {
+	window.open(`/productDescription?productId=${productId}`, '_blank', 'width=800,height=600');
+}
+</script>
+</body>
+</html>

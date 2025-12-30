@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Giỏ hàng của bạn</title>
+<link rel="stylesheet" href={{url_for('static', filename='css/cart.css')}} />
+<link rel="stylesheet" href={{url_for('static', filename='css/topStyle.css') }} />
+</head>
+<body>
+<div id="title">
+	<a href="/">
+	<img id="logo" src= {{ url_for('static', filename='images/logo.png') }} />
+	</a>
+	<form>
+		<input id="searchBox" type="text" name="searchQuery" placeholder="Tìm kiếm...">
+		<input id="searchButton" type="submit" value="Tìm kiếm">
+	</form>
+
+	{% if not loggedIn %}
+		<div id="signInButton">
+			<a class="link" href="/loginForm">Đăng nhập</a>
+		</div>
+	{% else %}
+	<div class="dropdown">
+		<button class="dropbtn">Xin chào, <br>{{firstName}}</button>
+		<div class="dropdown-content">
+			<a href="/account/orders">Đơn hàng của bạn</a>
+			<a href="/account/profile">Hồ sơ cá nhân</a>
+			<hr>
+			<a href="/logout">Đăng xuất</a>
+		</div>
+	</div>
+	{% endif %}
+	<div id="kart">
+		<a class="link" href="/cart">
+		<img src={{url_for('static', filename='images/shoppingCart.png')}} id="cartIcon" alt="Biểu tượng giỏ hàng" />
+		GIỎ HÀNG {{noOfItems}}
+		</a>
+	</div>
+</div>
+<div id="cartItems">
+	<h2>Giỏ hàng</h2>
+	<div id="tableItems">
+		{% for row in products %}
+		<div>
+			<hr id="seperator">
+			<div id="itemImage">
+				<img src={{url_for('static', filename='uploads/'+row[3])}} id="image" alt="Hình ảnh sản phẩm"/>
+			</div>
+			<div id="itemName">
+				<span id="itemNameTag">{{row[1]}}</span><br>
+				Còn hàng<br>
+				<a href="/removeFromCart?productId={{row[0]}}">Xóa</a>
+			</div>
+			<div id="itemPrice">
+				${{row[2]}}
+			</div>
+		</div>
+		{% endfor %}
+		<hr id="seperator">
+		<div id="total">
+			<span id="subtotal">Tổng tiền</span> : ${{totalPrice}}
+		</div>
+	</div>
+</div>
+<a href="/checkout">Tiến hành thanh toán</a>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

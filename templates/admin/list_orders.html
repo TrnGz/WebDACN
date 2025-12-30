@@ -1,0 +1,88 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Quản lý đơn hàng{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="card-header">
+        <h3><i class="fas fa-shopping-cart"></i> Danh sách đơn hàng</h3>
+    </div>
+    
+    <!-- Search and Filter Form -->
+    <form method="get" style="margin: 1rem 2rem;">
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+            <div>
+                <label for="search_name">Tìm theo tên khách hàng:</label><br/>
+                <input type="text" id="search_name" name="search_name" value="{{ search_name }}" placeholder="Nhập tên..." style="padding: 6px; border-radius: 5px; border: 1px solid #ccc;">
+            </div>
+            <div>
+                <label for="start_date">Từ ngày:</label><br/>
+                <input type="date" id="start_date" name="start_date" value="{{ start_date }}" style="padding: 6px; border-radius: 5px; border: 1px solid #ccc;">
+            </div>
+            <div>
+                <label for="end_date">Đến ngày:</label><br/>
+                <input type="date" id="end_date" name="end_date" value="{{ end_date }}" style="padding: 6px; border-radius: 5px; border: 1px solid #ccc;">
+            </div>
+            <div style="align-self: flex-end;">
+                <button type="submit" class="btn btn-primary" style="padding: 8px 20px;">
+                    <i class="fas fa-search"></i> Tìm kiếm
+                </button>
+                <a href="{{ url_for('admin.list_orders') }}" class="btn btn-secondary" style="padding: 8px 20px; margin-left: 0.5rem;">
+                    <i class="fas fa-sync-alt"></i> Đặt lại
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Khách hàng</th>
+                    <th>Email</th>
+                    <th>Ngày đặt</th>
+                    <th>Trạng thái</th>
+                    <th>Tổng tiền</th>
+                    <th>Thanh toán</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td><strong>#{{ order[0] }}</strong></td>
+                    <td>{{ order[1] }} {{ order[2] }}</td>
+                    <td>{{ order[3] }}</td>
+                    <td>{{ order[4] }}</td>
+                    <td>
+                        <span class="status-badge 
+                            {% if order[5] == 'Đang xử lý' %}status-pending
+                            {% elif order[5] == 'Đang giao' %}status-processing
+                            {% elif order[5] == 'Hoàn thành' %}status-completed
+                            {% else %}status-cancelled{% endif %}">
+                            {{ order[5] }}
+                        </span>
+                    </td>
+                    <td><strong>{{ "{:,.0f}".format(order[6]) }} VNĐ</strong></td>
+                    <td>{{ order[7] or 'Chưa xác định' }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.view_order', orderId=order[0]) }}" 
+                           class="btn btn-primary" style="margin-right: 5px;">
+                            <i class="fas fa-eye"></i> Xem
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 40px; color: #666;">
+                        <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+                        Không tìm thấy đơn hàng
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

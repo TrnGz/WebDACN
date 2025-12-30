@@ -1,0 +1,406 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Root Variables */
+:root {
+    --primary-pink: #ff6b9d;
+    --secondary-pink: #ff8fab;
+    --accent-gold: #ffd700;
+    --cream: #fff8f3;
+    --light-pink: #ffebf0;
+    --dark-brown: #4a3728;
+    --medium-brown: #8b6f47;
+    --white: #ffffff;
+    --shadow-primary: rgba(255, 107, 157, 0.2);
+    --shadow-gold: rgba(255, 215, 0, 0.3);
+    --gradient-1: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 50%, #ffd700 100%);
+    --gradient-2: linear-gradient(45deg, #fff8f3 0%, #ffebf0 100%);
+    --cake-pink: #ffb3d1;
+    --cake-cream: #fff5e6;
+    --cake-chocolate: #8b4513;
+    --success-green: #4caf50;
+    --warning-orange: #ff9800;
+    --danger-red: #f44336;
+    --info-blue: #2196f3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--gradient-2);
+    color: var(--dark-brown);
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 179, 209, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 245, 230, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255, 107, 157, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Order Container */
+.orderContainer {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.orderContainer h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--cake-chocolate) 0%, var(--primary-pink) 50%, var(--accent-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.orderContainer h2::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 5px;
+    background: linear-gradient(90deg, var(--cake-pink), var(--accent-gold), var(--cake-pink));
+    border-radius: 3px;
+    box-shadow: 0 2px 8px rgba(255, 179, 209, 0.4);
+}
+
+/* Order List */
+.orderList {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Order Card */
+.orderCard {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 230, 0.9) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 
+        0 15px 35px rgba(255, 179, 209, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border: 2px solid rgba(255, 179, 209, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.orderCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+        0 25px 50px rgba(255, 179, 209, 0.25),
+        0 0 0 3px rgba(255, 179, 209, 0.1);
+}
+
+/* Order Header */
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255, 179, 209, 0.2);
+}
+
+.orderInfo h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--cake-chocolate);
+    margin-bottom: 0.5rem;
+}
+
+.orderDate {
+    font-size: 0.95rem;
+    color: var(--medium-brown);
+    opacity: 0.8;
+}
+
+.orderStatus {
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.orderStatus.đang.xử.lý {
+    background-color: rgba(255, 152, 0, 0.2);
+    color: var(--warning-orange);
+    border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.orderStatus.đã.giao {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: var(--success-green);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.orderStatus.đã.hủy {
+    background-color: rgba(244, 67, 54, 0.2);
+    color: var(--danger-red);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+/* Order Items */
+.orderItems {
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.orderItem {
+    display: flex;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed rgba(255, 179, 209, 0.3);
+}
+
+.orderItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.itemImage {
+    width: 80px;
+    height: 80px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(255, 179, 209, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.8);
+}
+
+.itemImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.itemDetails {
+    flex: 1;
+}
+
+.itemDetails h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--cake-chocolate);
+    margin-bottom: 0.5rem;
+}
+
+.itemPrice {
+    font-weight: 600;
+    color: var(--primary-pink);
+    margin-bottom: 0.3rem;
+}
+
+.itemQuantity {
+    font-size: 0.9rem;
+    color: var(--medium-brown);
+}
+
+/* Order Footer */
+.orderFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(to right, rgba(255, 179, 209, 0.1), rgba(255, 215, 0, 0.1));
+    border-top: 1px solid rgba(255, 179, 209, 0.2);
+}
+
+.orderTotal {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 600;
+}
+
+.totalPrice {
+    font-size: 1.3rem;
+    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--accent-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.orderActions {
+    display: flex;
+    gap: 1rem;
+}
+
+.viewDetails, .cancelOrder {
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.viewDetails {
+    background: var(--gradient-1);
+    color: white;
+}
+
+.cancelOrder {
+    background: rgba(244, 67, 54, 0.1);
+    color: var(--danger-red);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.viewDetails:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--shadow-primary);
+}
+
+.cancelOrder:hover {
+    background: rgba(244, 67, 54, 0.2);
+    transform: translateY(-3px);
+}
+
+/* Empty Orders */
+.emptyOrders {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 230, 0.9) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 25px;
+    box-shadow: 
+        0 15px 35px rgba(255, 179, 209, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border: 2px solid rgba(255, 179, 209, 0.15);
+}
+
+.emptyIcon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    animation: bounce 2s ease infinite;
+}
+
+.emptyOrders h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--cake-chocolate);
+    margin-bottom: 1rem;
+}
+
+.emptyOrders p {
+    font-size: 1.1rem;
+    color: var(--medium-brown);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+}
+
+.shopNow {
+    display: inline-block;
+    background: var(--gradient-1);
+    color: white;
+    text-decoration: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.shopNow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px var(--shadow-primary);
+}
+
+/* Animations */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .orderContainer {
+        padding: 0 1rem;
+    }
+    
+    .orderHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .orderStatus {
+        align-self: flex-start;
+    }
+    
+    .orderFooter {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .orderTotal {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .orderActions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .viewDetails, .cancelOrder {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .orderContainer h2 {
+        font-size: 2.2rem;
+    }
+    
+    .orderItem {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .itemImage {
+        width: 100px;
+        height: 100px;
+    }
+}
